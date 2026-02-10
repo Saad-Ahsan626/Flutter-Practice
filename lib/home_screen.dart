@@ -24,28 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
         
       ),
       body: Center(
-        child: RichText(text: TextSpan(
-          style: TextStyle( color: Colors.black),
-        
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextSpan( text: ("Don't have an account..??" ),style: TextStyle(fontSize: 20)),
-            
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: InkWell(
+            Image(
+              image: AssetImage("assets/image1.jpg"),
+              height: 200,),
+            CircleAvatar(
               
-              onTap: (){
-                print("HELLO");
-              },
-              child: Text(" Sign Up",style: TextStyle(fontSize: 20,color: Colors.blue),),
-              
-            ))
-
-            
-
-            
-          ]
-        )),
+              radius: 100,
+              backgroundImage: AssetImage("assets/image1.jpg"),
+            ),
+          ],
+        ),
       )
     );
   }
