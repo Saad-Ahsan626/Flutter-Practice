@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/card.dart';
+import 'package:flutter_practice/category.dart';
+import 'package:flutter_practice/item_banner.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,104 +12,159 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  List<String> banners = ['banner1.jpg', 'banner2.jpg', 'banner3.jpg'];
+  int currentindex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: formKey,
-          child: ListView(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: FlutterLogo(),
+        ),
+        title: Text('E-Commerce App'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Badge(label: Text('15'), child: Icon(CupertinoIcons.bell)),
+          ),
+        ],
+      ),
+
+      body: ListView(
+        children: [
+          Card(
+            margin: EdgeInsets.all(15),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search for products',
+                prefixIcon: Icon(CupertinoIcons.search),
+                suffixIcon: Icon(CupertinoIcons.mic),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+
+          // Banners
+          SizedBox(
+            height: 150,
+            child: PageView(
+              onPageChanged: (value) {
+                setState(() {
+                  currentindex = value;
+                });
+              },
+              children: [
+                ItemBanner(image: 'assets/Images/banner.jpg'),
+                ItemBanner(image: 'assets/Images/banner.jpg'),
+                ItemBanner(image: 'assets/Images/banner.jpg'),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              children: [
+                for (int index = 0; index < banners.length; index++)
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    height: currentindex == index ? 12 : 8,
+                    width: currentindex == index ? 12 : 8,
+                    decoration: BoxDecoration(
+                      color: currentindex == index
+                          ? Colors.grey
+                          : Colors.grey.shade400,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          ListTile(
+            title: Text('Categories'),
+            trailing: Text('View All', style: TextStyle(color: Colors.indigo)),
+          ),
+
+          SizedBox(
+            height: 100,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                CategoryItem(
+                  color: Colors.orange,
+                  image: 'assets/Images/drugs.png',
+                  category: 'Medicine',
+                ),
+                CategoryItem(
+                  color: Colors.blue,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Electronics',
+                ),
+                CategoryItem(
+                  color: Colors.green,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Clothing',
+                ),
+                CategoryItem(
+                  color: Colors.blue,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Clothing',
+                ),
+                CategoryItem(
+                  color: Colors.orange,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Clothing',
+                ),
+                CategoryItem(
+                  color: Colors.blue,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Electronics',
+                ),
+                CategoryItem(
+                  color: Colors.green,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Clothing',
+                ),
+                CategoryItem(
+                  color: Colors.blue,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Clothing',
+                ),
+                CategoryItem(
+                  color: Colors.orange,
+                  image: 'assets/Images/drungs.png',
+                  category: 'Clothing',
+                ),
+              ],
+            ),
+          ),
+
+          ListTile(
+            title: Text('Products'),
+            trailing: Text('View All', style: TextStyle(color: Colors.indigo)),
+          ),
+
+          GridView.count(
+            crossAxisCount: 2,
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             children: [
-              FlutterLogo(size: 100),
-              SizedBox(height: 20),
-              Text(
-                "Welcome Back!",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Enter Your Email',
-                  prefixIcon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                controller: email,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!value.contains('@') || !value.contains('.')) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Enter Your Password',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                obscureText: true,
-                keyboardType: TextInputType.visiblePassword,
-                controller: password,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-
-              SizedBox(
-                width: double.infinity,
-
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigo,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.all(10),
-                  ),
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {}
-                  },
-                  child: Text('Login'),
-                ),
-              ),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(onPressed: () {}, child: Text('Forgot Password?')),
-                ],
-              ),
-              SizedBox(height: 10),
-
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  child: Text('Don\'t have an account? Sign Up'),
-                ),
-              ),
+              CardItem(title: 'Professional Camera', price: 'Rs 5000'),
+              CardItem(title: 'Professional Camera', price: 'Rs 5000'),
+              CardItem(title: 'Professional Camera', price: 'Rs 5000'),
+              CardItem(title: 'Professional Camera', price: 'Rs 5000'),
+              CardItem(title: 'Professional Camera', price: 'Rs 5000'),
+              CardItem(title: 'Professional Camera', price: 'Rs 5000'),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
