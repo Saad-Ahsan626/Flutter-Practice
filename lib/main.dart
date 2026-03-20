@@ -5,6 +5,8 @@ void main() async {
   runApp(MyApp());
 }
 
+double height = 200, width = 200;
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -15,13 +17,25 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       title: 'Flutter Demo',
       home: Scaffold(
-        body: FlutterMap(
-          mapController: MapController(),
-          options: MapOptions(),
-          children: [TileLayer(
-  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  
-),],
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: AnimatedContainer(
+                duration: Duration(seconds: 1),
+                height: height,
+                width: width,
+                color: Colors.white10,
+              ),
+            ),
+            ElevatedButton(
+              child: Text("Change Size"),
+              onPressed: () {
+                height = 400;
+                width = 400;
+              },
+            ),
+          ],
         ),
       ),
     );
