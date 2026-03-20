@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:lottie/lottie.dart';
 
 void main() async {
   runApp(MyApp());
@@ -17,25 +18,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       title: 'Flutter Demo',
       home: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: AnimatedContainer(
-                duration: Duration(seconds: 1),
-                height: height,
-                width: width,
-                color: Colors.white10,
-              ),
-            ),
-            ElevatedButton(
-              child: Text("Change Size"),
-              onPressed: () {
-                height = 400;
-                width = 400;
-              },
-            ),
-          ],
+        body: Center(
+          child: Lottie.asset("assets/loading.json")
         ),
       ),
     );
