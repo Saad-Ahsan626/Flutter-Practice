@@ -9,13 +9,16 @@ final radio = StateProvider<bool>((ref) {
   return false;
 });
 
-class Homescreen1 extends ConsumerWidget {
+class Homescreen1 extends ConsumerStatefulWidget {
   const Homescreen1({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-     print('Building Homescreen1');
-    
+  ConsumerState<Homescreen1> createState() => _Homescreen1State();
+}
+
+class _Homescreen1State extends ConsumerState<Homescreen1> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Counter App'),
