@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/MyProvider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final counter = StateProvider((ref) {
-  return 0;
-});
-
-final radio = StateProvider<bool>((ref) {
-  return false;
-});
 
 class Homescreen1 extends ConsumerStatefulWidget {
   const Homescreen1({super.key});
@@ -20,18 +13,18 @@ class _Homescreen1State extends ConsumerState<Homescreen1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Counter App'),
-      ),
+      appBar: AppBar(title: const Text('Counter App')),
       body: Column(
         children: [
           Consumer(
             builder: (context, ref, child) {
-              final count = ref.watch(counter);
+              final counter = ref.watch(
+                MyProvider.select((state) => state.count),
+              );
               print('Building Counter Text');
               return Center(
                 child: Text(
-                  'Count: $count',
+                  'Count: $counter',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               );
@@ -39,23 +32,30 @@ class _Homescreen1State extends ConsumerState<Homescreen1> {
           ),
           ElevatedButton(
             onPressed: () {
-              ref.read(counter.notifier).state++;
+              ref.read(MyProvider.notifier).update((state) {
+                return state.copyWith(count: state.count + 1);
+              });
             },
             child: const Text('Increment'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
+
           Consumer(
             builder: (context, ref, child) {
-              final isRadioOn = ref.watch(radio);
+              final forRadio = ref.watch(
+                MyProvider.select((state) => state.isRadioOn),
+              );
               print('Building Radio Switch');
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Toggle Radio'),
                   Switch(
-                    value: isRadioOn,
+                    value: forRadio,
                     onChanged: (value) {
-                      ref.read(radio.notifier).state = value;
+                      ref.read(MyProvider.notifier).update((state) {
+                        return state.copyWith(isRadioOn: value);
+                      });
                     },
                   ),
                 ],
