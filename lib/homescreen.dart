@@ -19,7 +19,7 @@ class _Homescreen1State extends ConsumerState<Homescreen1> {
           Consumer(
             builder: (context, ref, child) {
               final counter = ref.watch(
-                MyProvider.select((state) => state.count),
+                MyStateNotifierProvider.select((state) => state.count),
               );
               print('Building Counter Text');
               return Center(
@@ -32,9 +32,7 @@ class _Homescreen1State extends ConsumerState<Homescreen1> {
           ),
           ElevatedButton(
             onPressed: () {
-              ref.read(MyProvider.notifier).update((state) {
-                return state.copyWith(count: state.count + 1);
-              });
+              ref.read(MyStateNotifierProvider.notifier).increment();
             },
             child: const Text('Increment'),
           ),
@@ -43,7 +41,7 @@ class _Homescreen1State extends ConsumerState<Homescreen1> {
           Consumer(
             builder: (context, ref, child) {
               final forRadio = ref.watch(
-                MyProvider.select((state) => state.isRadioOn),
+                MyStateNotifierProvider.select((state) => state.isRadioOn),
               );
               print('Building Radio Switch');
               return Row(
@@ -53,9 +51,9 @@ class _Homescreen1State extends ConsumerState<Homescreen1> {
                   Switch(
                     value: forRadio,
                     onChanged: (value) {
-                      ref.read(MyProvider.notifier).update((state) {
-                        return state.copyWith(isRadioOn: value);
-                      });
+                      ref
+                          .read(MyStateNotifierProvider.notifier)
+                          .toggleRadio(value);
                     },
                   ),
                 ],
