@@ -45,13 +45,13 @@ class ItemsNotifier extends StateNotifier<ItemsListState> {
 
   void addItem() {
     ItemModel item1 = ItemModel(
-      id: DateTime.now().toString(),
+      id: '1',
       name: 'Iphone 13 Pro Max',
       price: 10.0,
       isFavorite: false,
     );
     ItemModel item2 = ItemModel(
-      id: DateTime.now().toString(),
+      id: '2',
       name: 'Iphone 14 Pro Max',
       price: 20.0,
       isFavorite: true,
@@ -65,9 +65,9 @@ class ItemsNotifier extends StateNotifier<ItemsListState> {
     state = state.copyWith(allItems: [...state.allItems, item1, item2, item3]);
   }
 
-  void deleteItem(int index) {
+  void deleteItem(String id) {
     List<ItemModel> updatedItems = List.from(state.allItems);
-    updatedItems.removeAt(index);
+    updatedItems.removeWhere((item) => item.id == id);
     state = state.copyWith(allItems: updatedItems);
   }
 
@@ -79,20 +79,27 @@ class ItemsNotifier extends StateNotifier<ItemsListState> {
   }
 
   void showAllItems() {
-    state = state.copyWith(favoriteItems: []);
+    state = state.copyWith(allItems: state.allItems);
   }
 
   void searchItems(String query) {
+    
+    if (query == '') {
+      state = state.copyWith(search: '', allItems: state.allItems);
+    }
+    
     List<ItemModel> searchResults = state.allItems
         .where((item) => item.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    state = state.copyWith(search: query, favoriteItems: searchResults);
+    state = state.copyWith(search: query, allItems: searchResults);
   }
 }
 
 final ItemProvider = StateNotifierProvider<ItemsNotifier, ItemsListState>(
   (ref) => ItemsNotifier(),
 );
+
+
 
 class ItemScreen extends ConsumerWidget {
   const ItemScreen({super.key});
@@ -106,9 +113,17 @@ class ItemScreen extends ConsumerWidget {
           PopupMenuButton(
             onSelected: (value) {
               if (value == '1') {
-                ref.read(ItemProvider.notifier).showFavoriteItems();
+                ref.read(ItemProvider.select((state) => state.allItems)).isEmpty
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No items available')),
+                      )
+                    : ref.read(ItemProvider.notifier).showFavoriteItems();
               } else if (value == '2') {
-                ref.read(ItemProvider.notifier).showAllItems();
+                ref.read(ItemProvider.select((state) => state.allItems)).isEmpty
+                    ? ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No items available')),
+                      )
+                    : ref.read(ItemProvider.notifier).showAllItems();
               }
             },
             itemBuilder: (BuildContext context) {
@@ -151,7 +166,7 @@ class ItemScreen extends ConsumerWidget {
                     children: [
                       IconButton(
                         onPressed: () {
-                          ref.read(ItemProvider.notifier).deleteItem(index);
+                          ref.read(ItemProvider.notifier).deleteItem(item.id);
                         },
                         icon: const Icon(Icons.delete),
                       ),

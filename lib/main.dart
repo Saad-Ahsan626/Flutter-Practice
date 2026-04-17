@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice/homescreen.dart';
+import 'package:flutter_practice/item.dart';
 import 'package:flutter_practice/todo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light(),
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        home: const Todo(),
+        home: const ItemScreen(),
       ),
     );
   }
