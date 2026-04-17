@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice/homescreen.dart';
+import 'package:flutter_practice/todo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         theme: ThemeData.light(),
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        home: Homescreen1(),
+        home: const Todo(),
       ),
     );
   }

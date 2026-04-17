@@ -41,4 +41,50 @@ final TodoProvider = StateNotifierProvider<TodoNotifier, List<TodoModel>>((
   return TodoNotifier();
 });
 
+class Todo extends ConsumerWidget {
+  const Todo({super.key});
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todos = ref.watch(TodoProvider);
+    return Scaffold(
+      appBar: AppBar(title: Center(child: const Text('Todo List'))),
+      body: todos.isEmpty
+          ? const Center(child: Text('No todos yet'))
+          : ListView.builder(
+              itemCount: todos.length,
+              itemBuilder: (context, index) {
+                final todo = todos[index];
+                return ListTile(
+                  title: Text(todo.title),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          ref.read(TodoProvider.notifier).deleteTodo(todo.id);
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          ref
+                              .read(TodoProvider.notifier)
+                              .updateTodo(todo.id, 'Updated Title');
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref.read(TodoProvider.notifier).addTodo('Saad Ahsan');
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
